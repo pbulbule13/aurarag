@@ -1,0 +1,28 @@
+flowchart LR
+    subgraph Ingestion
+        A["Connectors<br/>(Files, Web, DB)"] --> B[Chunker]
+        B --> C[Embeddings Generator]
+        C -->|vectors| D[(Vector DB)]
+        B -->|metadata| E[(Document Store)]
+    end
+
+    subgraph Query Path
+        Q[User Query] --> QN[Query Normalizer]
+        QN --> QE[Query Embedding]
+        QE --> R{Retriever}
+        R -->|kNN| D
+        R -->|docs| E
+        D --> CTX[Context Builder]
+        E --> CTX
+        CTX --> LLM[LLM Orchestrator]
+        LLM --> RESP[Response]
+        RESP --> U[User]
+    end
+
+    RR[Re-ranker] --- R
+    TOOLS[Tools/Functions] --- LLM
+    OBS[Observability] --- LLM
+
+    style D fill:#e6f7ff,stroke:#39c
+    style E fill:#fff7e6,stroke:#c93
+    style LLM fill:#f0f5ff,stroke:#69c

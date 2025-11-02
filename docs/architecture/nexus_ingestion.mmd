@@ -1,0 +1,14 @@
+flowchart TD
+    SRC[Sources - SharePoint, Google Drive, OneDrive, S3, Azure SQL or NoSQL]
+    STRM[Kinesis or Kafka]
+    AFLW[Airflow]
+    EXT[Extract / Normalize]
+    CH[Chunk]
+    EMB[Embeddings - Cohere or Mistral]
+    VDB[(Vector DB - Pinecone Chroma Mongo Vector)]
+    DSTORE[(Object Store - S3)]
+
+    SRC --> EXT --> CH --> EMB --> VDB
+    CH --> DSTORE
+    STRM --> EXT
+    AFLW --> EXT

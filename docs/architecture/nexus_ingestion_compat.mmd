@@ -1,0 +1,16 @@
+flowchart TD
+    %% Basic, parser-safe version for Mermaid 10.9.4
+    SOURCES[Sources - SharePoint, Google Drive, OneDrive, S3, Azure SQL or NoSQL]
+    STREAM[Kinesis or Kafka]
+    AIRFLOW[Airflow]
+    EXTRACT[Extract and Normalize]
+    CHUNK[Chunk]
+    EMBED[Embeddings - Cohere or Mistral]
+    VECTORDb[Vector DB - Pinecone Chroma Mongo]
+    DOCSTORE[Object Store - S3]
+
+    SOURCES --> EXTRACT --> CHUNK --> EMBED --> VECTORDb
+    CHUNK --> DOCSTORE
+    STREAM --> EXTRACT
+    AIRFLOW --> EXTRACT
+

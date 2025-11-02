@@ -1,0 +1,44 @@
+flowchart LR
+    %% Basic, parser-safe version for Mermaid 10.9.4
+    subgraph Clients
+        WEB[Web App]
+        MOB[Mobile App]
+        SLACK[Slack]
+        TEAMS[MS Teams]
+        WHATSAPP[WhatsApp]
+        TELEGRAM[Telegram]
+        ADMIN[Admin Dashboard RBAC]
+    end
+
+    API[API Gateway and Backend] --> ORCH[LLM Orchestrator]
+
+    subgraph Ingestion
+        SOURCES[Sources - SharePoint, Google Drive, OneDrive, S3, Azure SQL or NoSQL]
+        STREAM[Kinesis or Kafka]
+        AIRFLOW[Airflow Scheduler]
+        EXTRACT[Extract and Chunk]
+        EMBED[Embeddings - Cohere or Mistral]
+        VECTORDb[Vector DB - Pinecone Chroma Mongo]
+        DOCSTORE[Object Store - S3]
+        SOURCES --> EXTRACT --> EMBED --> VECTORDb
+        EXTRACT --> DOCSTORE
+        STREAM --> EXTRACT
+        AIRFLOW --> EXTRACT
+    end
+
+    ORCH --> QEMB[Query Embedding - Cohere or Mistral]
+    QEMB --> RETRIEVE{Retriever}
+    RETRIEVE --> VECTORDb
+    VECTORDb --> CONTEXT[Context Builder]
+    CONTEXT --> LLM[LLM Layer - OpenAI Gemini Llama Mistral or vLLM]
+    LLM --> OUT[Response and Citations]
+
+    WEB --> API
+    MOB --> API
+    SLACK --> API
+    TEAMS --> API
+    WHATSAPP --> API
+    TELEGRAM --> API
+    ADMIN --> API
+    OUT --> API
+

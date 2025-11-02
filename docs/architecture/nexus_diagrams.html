@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nexus Architecture Diagrams</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; }
+      h1 { margin-top: 0; }
+      h2 { margin-top: 32px; }
+      .diagram { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; background: #fff; }
+      .note { color: #555; font-size: 0.95em; margin-bottom: 16px; }
+      .src { font-size: 0.9em; color: #666; }
+      pre.mermaid { white-space: pre-wrap; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, securityLevel: 'loose', theme: 'default' });</script>
+  </head>
+  <body>
+    <h1>Nexus Architecture Diagrams</h1>
+    <p class="note">These diagrams reflect the stack mentioned in <code>docs/1stseptnexusproject.txt</code>.</p>
+    <div class="diagram" id="index">
+      <strong>Index</strong>
+      <ul>
+        <li><a href="#arch">Architecture Overview</a></li>
+        <li><a href="#arch-compat">Architecture Overview (Compat)</a></li>
+        <li><a href="#ingest">Ingestion Pipeline</a></li>
+        <li><a href="#ingest-compat">Ingestion Pipeline (Compat)</a></li>
+        <li><a href="#sequence">Request Sequence</a></li>
+      </ul>
+    </div>
+
+    <h2 id="arch">Architecture Overview</h2>
+    <div class="diagram">
+      <pre class="mermaid">flowchart LR
+    subgraph Clients
+        WEB[Web App]
+        MOB[Mobile App]
+        SLACK[Slack]
+        TEAMS[MS Teams]
+        WHATSAPP[WhatsApp]
+        TELEGRAM[Telegram]
+        ADMIN[Admin Dashboard RBAC]
+    end
+
+    API[API Gateway and Backend] --> ORCH[LLM Orchestrator]
+
+    subgraph Ingestion
+        SOURCES[Sources - SharePoint, Google Drive, OneDrive, S3, Azure SQL or NoSQL]
+        STREAM[Kinesis or Kafka]
+        AIRFLOW[Airflow Scheduler]
+        EXTRACT[Extract and Chunk]
+        EMBED[Embeddings - Cohere or Mistral]
+        VECTORDb[Vector DB - Pinecone Chroma Mongo]
+        DOCSTORE[Object Store - S3]
+        SOURCES --> EXTRACT --> EMBED --> VECTORDb
+        EXTRACT --> DOCSTORE
+        STREAM --> EXTRACT
+        AIRFLOW --> EXTRACT
+    end
+
+    ORCH --> QEMB[Query Embedding - Cohere or Mistral]
+    QEMB --> RETRIEVE{Retriever}
+    RETRIEVE --> VECTORDb
+    VECTORDb --> CONTEXT[Context Builder]
+    CONTEXT --> LLM[LLM Layer - OpenAI Gemini Llama Mistral or vLLM]
+    LLM --> OUT[Response and Citations]
+
+    WEB --> API
+    MOB --> API
+    SLACK --> API
+    TEAMS --> API
+    WHATSAPP --> API
+    TELEGRAM --> API
+    ADMIN --> API
+    OUT --> API</pre>
+    </div>
+
+    <h2 id="arch-compat">Architecture Overview (Compat)</h2>
+    <div class="diagram">
+      <pre class="mermaid">flowchart LR
+    subgraph Clients
+        WEB[Web App]
+        MOB[Mobile App]
+        SLACK[Slack]
+        TEAMS[MS Teams]
+        WHATSAPP[WhatsApp]
+        TELEGRAM[Telegram]
+        ADMIN[Admin Dashboard RBAC]
+    end
+
+    API[API Gateway and Backend] --> ORCH[LLM Orchestrator]
+
+    subgraph Ingestion
+        SOURCES[Sources - SharePoint, Google Drive, OneDrive, S3, Azure SQL or NoSQL]
+        STREAM[Kinesis or Kafka]
+        AIRFLOW[Airflow Scheduler]
+        EXTRACT[Extract and Chunk]
+        EMBED[Embeddings - Cohere or Mistral]
+        VECTORDb[Vector DB - Pinecone Chroma Mongo]
+        DOCSTORE[Object Store - S3]
+        SOURCES --> EXTRACT --> EMBED --> VECTORDb
+        EXTRACT --> DOCSTORE
+        STREAM --> EXTRACT
+        AIRFLOW --> EXTRACT
+    end
+
+    ORCH --> QEMB[Query Embedding - Cohere or Mistral]
+    QEMB --> RETRIEVE{Retriever}
+    RETRIEVE --> VECTORDb
+    VECTORDb --> CONTEXT[Context Builder]
+    CONTEXT --> LLM[LLM Layer - OpenAI Gemini Llama Mistral or vLLM]
+    LLM --> OUT[Response and Citations]
+
+    WEB --> API
+    MOB --> API
+    SLACK --> API
+    TEAMS --> API
+    WHATSAPP --> API
+    TELEGRAM --> API
+    ADMIN --> API
+    OUT --> API</pre>
+    </div>
+
+    <h2 id="ingest">Ingestion Pipeline</h2>
+    <div class="diagram">
+      <pre class="mermaid">flowchart TD
+    SRC[Sources - SharePoint, Google Drive, OneDrive, S3, Azure SQL or NoSQL]
+    STRM[Kinesis or Kafka]
+    AFLW[Airflow]
+    EXT[Extract / Normalize]
+    CH[Chunk]
+    EMB[Embeddings - Cohere or Mistral]
+    VDB[(Vector DB - Pinecone Chroma Mongo Vector)]
+    DSTORE[(Object Store - S3)]
+
+    SRC --> EXT --> CH --> EMB --> VDB
+    CH --> DSTORE
+    STRM --> EXT
+    AFLW --> EXT</pre>
+    </div>
+
+    <h2 id="ingest-compat">Ingestion Pipeline (Compat)</h2>
+    <div class="diagram">
+      <pre class="mermaid">flowchart TD
+    SOURCES[Sources - SharePoint, Google Drive, OneDrive, S3, Azure SQL or NoSQL]
+    STREAM[Kinesis or Kafka]
+    AIRFLOW[Airflow]
+    EXTRACT[Extract and Normalize]
+    CHUNK[Chunk]
+    EMBED[Embeddings - Cohere or Mistral]
+    VECTORDb[Vector DB - Pinecone Chroma Mongo]
+    DOCSTORE[Object Store - S3]
+
+    SOURCES --> EXTRACT --> CHUNK --> EMBED --> VECTORDb
+    CHUNK --> DOCSTORE
+    STREAM --> EXTRACT
+    AIRFLOW --> EXTRACT</pre>
+    </div>
+
+    <h2 id="sequence">Request Sequence</h2>
+    <div class="diagram">
+      <pre class="mermaid">sequenceDiagram
+    autonumber
+    participant C as Client (Web/Slack/Teams/...)
+    participant API as API Gateway
+    participant ORCH as LLM Orchestrator
+    participant RET as Retriever
+    participant VDB as Vector DB (Pinecone/Chroma/Mongo)
+    participant L as LLM (OpenAI/Gemini/vLLM)
+
+    C->>API: Chat request
+    API->>ORCH: Normalize + guardrails
+    ORCH->>RET: Embed query (Cohere/Mistral)
+    RET->>VDB: kNN search
+    VDB-->>RET: Top-k passages
+    RET-->>ORCH: Context + citations
+    ORCH->>L: Prompt with context
+    L-->>ORCH: Completion
+    ORCH-->>API: Answer + citations
+    API-->>C: Response</pre>
+    </div>
+
+    <p class="src">Sources: docs/1stseptnexusproject.txt, docs/architecture/NEXUS_TECH_STACK.md</p>
+  </body>
+  </html>

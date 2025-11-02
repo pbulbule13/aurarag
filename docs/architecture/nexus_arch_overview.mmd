@@ -1,0 +1,57 @@
+flowchart LR
+    subgraph Clients
+        WEB[Web App]
+        MOB[Mobile App]
+        SLK[Slack]
+        TMS[MS Teams]
+        WSP[WhatsApp]
+        TLG[Telegram]
+        ADM[Admin Dashboard RBAC]
+    end
+
+    GATE[API Gateway and Backend] --> ORCH[LLM Orchestrator]
+
+    subgraph Ingestion
+        SRC[Sources - SharePoint, Google Drive, OneDrive, S3, Azure SQL or NoSQL]
+        STRM[Kinesis or Kafka]
+        AFLW[Airflow Scheduler]
+        EXT[Extract and Chunk]
+        EMB[Embeddings - Cohere or Mistral]
+        VDB[(Vector DB - Pinecone Chroma Mongo Vector)]
+        DSTORE[(Object Store - S3)]
+        SRC --> EXT --> EMB --> VDB
+        EXT --> DSTORE
+        STRM --> EXT
+        AFLW --> EXT
+    end
+
+    ORCH --> QEMB[Query Embedding - Cohere or Mistral]
+    QEMB --> RET{Retriever}
+    RET -->|kNN| VDB
+    VDB --> CTX[Context Builder]
+    CTX --> LLM[LLM Layer - OpenAI Gemini Llama Mistral API or vLLM]
+    LLM --> RESP[Response and Citations]
+
+    subgraph Observability
+        PRM[Prometheus]
+        GRF[Grafana]
+    end
+
+    subgraph Infra
+        K8S[Kubernetes EKS]
+        S3[(S3)]
+    end
+
+    WEB --> GATE
+    MOB --> GATE
+    SLK --> GATE
+    TMS --> GATE
+    WSP --> GATE
+    TLG --> GATE
+    ADM --> GATE
+    RESP --> GATE
+
+    GATE --- PRM
+    ORCH --- PRM
+    LLM --- PRM
+    PRM --- GRF

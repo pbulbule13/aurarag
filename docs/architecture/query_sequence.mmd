@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant API as API Gateway
+    participant ORCH as LLM Orchestrator
+    participant RET as Retriever
+    participant VDB as Vector DB
+    participant DSD as Doc Store
+
+    U->>API: Send query
+    API->>ORCH: Normalize + plan
+    ORCH->>RET: Build embedding + retrieve
+    RET->>VDB: kNN similarity search
+    VDB-->>RET: Top-k vector hits
+    RET->>DSD: Fetch source passages
+    DSD-->>RET: Passages + metadata
+    RET-->>ORCH: Candidate context
+    ORCH->>ORCH: Rerank/summarize context
+    ORCH->>ORCH: Prompt LLM with context
+    ORCH-->>API: Final answer + citations
+    API-->>U: Response
+

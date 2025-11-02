@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AuraRAG Architecture Diagrams</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; }
+      h1 { margin-top: 0; }
+      h2 { margin-top: 32px; }
+      .diagram { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; background: #fff; }
+      .note { color: #555; font-size: 0.95em; margin-bottom: 16px; }
+      .src { font-size: 0.9em; color: #666; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+      mermaid.initialize({ startOnLoad: true, securityLevel: 'loose', theme: 'default' });
+    </script>
+  </head>
+  <body>
+    <h1>AuraRAG Architecture Diagrams</h1>
+    <p class="note">These render directly in the browser using Mermaid. Edit the labels to match your PDF terminology as needed.</p>
+
+    <h2>System Overview</h2>
+    <div class="diagram">
+      <pre class="mermaid">flowchart LR
+    subgraph Ingestion
+        A["Connectors<br/>(Files, Web, DB)"] --> B[Chunker]
+        B --> C[Embeddings Generator]
+        C -->|vectors| D[(Vector DB)]
+        B -->|metadata| E[(Document Store)]
+    end
+
+    subgraph Query Path
+        Q[User Query] --> QN[Query Normalizer]
+        QN --> QE[Query Embedding]
+        QE --> R{Retriever}
+        R -->|kNN| D
+        R -->|docs| E
+        D --> CTX[Context Builder]
+        E --> CTX
+        CTX --> LLM[LLM Orchestrator]
+        LLM --> RESP[Response]
+        RESP --> U[User]
+    end
+
+    subgraph Optional Enhancements
+        RR[Re-ranker] --- R
+        TOOLS[Tools/Functions] --- LLM
+        OBS[Tracing/Telemetry] --- LLM
+    end
+
+    style D fill:#e6f7ff,stroke:#39c
+    style E fill:#fff7e6,stroke:#c93
+    style LLM fill:#f0f5ff,stroke:#69c</pre>
+    </div>
+
+    <h2>Request Sequence</h2>
+    <div class="diagram">
+      <pre class="mermaid">sequenceDiagram
+    autonumber
+    participant U as User
+    participant API as API Gateway
+    participant ORCH as LLM Orchestrator
+    participant RET as Retriever
+    participant VDB as Vector DB
+    participant DSD as Doc Store
+
+    U->>API: Send query
+    API->>ORCH: Normalize + plan
+    ORCH->>RET: Build embedding + retrieve
+    RET->>VDB: kNN similarity search
+    VDB-->>RET: Top-k vector hits
+    RET->>DSD: Fetch source passages
+    DSD-->>RET: Passages + metadata
+    RET-->>ORCH: Candidate context
+    ORCH->>ORCH: Rerank/summarize context
+    ORCH->>ORCH: Prompt LLM with context
+    ORCH-->>API: Final answer + citations
+    API-->>U: Response</pre>
+    </div>
+
+    <h2>Ingestion Pipeline</h2>
+    <div class="diagram">
+      <pre class="mermaid">flowchart TD
+    SRC["Sources<br/>(SharePoint, Confluence, Git, DB)"] --> EXT[Extract]
+    EXT --> CH[Chunk]
+    CH --> META[Enrich Metadata]
+    CH --> EMB[Generate Embeddings]
+    EMB --> VDB[(Vector DB)]
+    META --> DST[(Document Store)]
+    </pre>
+    </div>
+
+    <p class="src">Source: docs/architecture/ARCHITECTURE_DRAFT.md</p>
+  </body>
+  </html>
+
