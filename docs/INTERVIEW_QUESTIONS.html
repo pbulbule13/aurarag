@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG System Interview Questions - AuraRAG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        nav ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        nav a {
+            color: #495057;
+            text-decoration: none;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .question-block {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .question-block:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .question-block h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .answer-section {
+            margin-top: 15px;
+        }
+
+        .answer-section h4 {
+            color: #28a745;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .answer-section ul, .answer-section ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .answer-section li {
+            margin-bottom: 8px;
+        }
+
+        .cross-questions {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .cross-questions h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .cross-question-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 3px;
+        }
+
+        .cross-question-item strong {
+            color: #dc3545;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .highlight {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            color: #721c24;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-architecture { background: #d4edda; color: #155724; }
+        .badge-technical { background: #cce5ff; color: #004085; }
+        .badge-advanced { background: #f8d7da; color: #721c24; }
+        .badge-behavioral { background: #fff3cd; color: #856404; }
+
+        .resources {
+            background: #e7f3ff;
+            border-left: 5px solid #007bff;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .resources h4 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .resources ul {
+            list-style: none;
+        }
+
+        .resources li:before {
+            content: "📚 ";
+            margin-right: 5px;
+        }
+
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5em;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .back-to-top:hover {
+            background: #764ba2;
+            transform: translateY(-5px);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            nav {
+                display: none;
+            }
+            .back-to-top {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            .content {
+                padding: 20px;
+            }
+            nav ul {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎤 RAG System Interview Questions</h1>
+            <p>Comprehensive Guide for AuraRAG Project Interviews</p>
+        </header>
+
+        <nav id="nav">
+            <h3>Quick Navigation</h3>
+            <ul>
+                <li><a href="#architecture">Architecture & Design</a></li>
+                <li><a href="#technical">Technical Implementation</a></li>
+                <li><a href="#advanced">Advanced/Tricky Questions</a></li>
+                <li><a href="#behavioral">Behavioral Questions</a></li>
+                <li><a href="#metrics">Key Metrics Reference</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <!-- Architecture & Design Questions -->
+            <section id="architecture" class="section">
+                <h2><span class="badge badge-architecture">Architecture & Design</span></h2>
+
+                <div class="question-block">
+                    <h3>Q1: Explain your RAG architecture. How does data flow through the system?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ul>
+                            <li><strong>Ingestion Pipeline:</strong>
+                                <ul>
+                                    <li>Document connectors (PDF, web scraper, APIs) fetch raw data</li>
+                                    <li>Text preprocessor cleans and normalizes the text</li>
+                                    <li>Chunker splits documents into overlapping segments</li>
+                                    <li>Embedding service converts chunks to vector representations</li>
+                                    <li>Vector database (ChromaDB) stores embeddings with metadata</li>
+                                </ul>
+                            </li>
+                            <li><strong>Query Pipeline:</strong>
+                                <ul>
+                                    <li>User query received via FastAPI endpoint</li>
+                                    <li>Query gets embedded using the same embedding model</li>
+                                    <li>Vector similarity search retrieves top-K relevant chunks</li>
+                                    <li>Retrieved chunks become context for LLM</li>
+                                    <li>OpenAI GPT generates answer based on context</li>
+                                    <li>Response returned to user</li>
+                                </ul>
+                            </li>
+                            <li><strong>Storage Layer:</strong>
+                                <ul>
+                                    <li>ChromaDB for vector storage</li>
+                                    <li>Metadata stored alongside vectors (source, timestamp, chunk_id)</li>
+                                    <li>Persistent storage with backup strategy</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Cross-Questions You Should Be Ready For:</h4>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "Why did you choose ChromaDB over Pinecone/Weaviate/FAISS?"</strong>
+                            <p><strong>Answer:</strong> ChromaDB is lightweight, open-source, runs locally for development, easy to set up, supports metadata filtering, and has Python-first API. For production, might consider Pinecone for scale or Weaviate for GraphQL support.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "How do you handle concurrent ingestion requests?"</strong>
+                            <p><strong>Answer:</strong> FastAPI handles requests asynchronously, background tasks for heavy processing, queue-based system (Celery) for large-scale ingestion, locking mechanisms to prevent duplicate processing.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "What happens if ChromaDB goes down?"</strong>
+                            <p><strong>Answer:</strong> Graceful degradation with error responses, health checks to detect failures, backup/restore procedures, consider running ChromaDB in HA mode or using managed alternatives.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "How do you ensure data consistency?"</strong>
+                            <p><strong>Answer:</strong> Transactional operations where possible, idempotent ingestion (same document = same ID), versioning of documents, audit logs for tracking changes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q2: What is chunking and why is it important in RAG systems?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ul>
+                            <li><strong>Definition:</strong> Breaking large documents into smaller, semantically meaningful pieces (chunks)</li>
+                            <li><strong>Why Important:</strong>
+                                <ul>
+                                    <li>Embedding models have token limits (8K for ada-002)</li>
+                                    <li>Smaller chunks = more precise retrieval</li>
+                                    <li>Enables granular similarity matching</li>
+                                    <li>Better context relevance for LLM</li>
+                                </ul>
+                            </li>
+                            <li><strong>Chunking Strategy:</strong>
+                                <ul>
+                                    <li>Fixed-size chunks with character/token limits</li>
+                                    <li>Overlap between chunks (e.g., 10-20%) to preserve context</li>
+                                    <li>Paragraph or sentence-based boundaries preferred</li>
+                                </ul>
+                            </li>
+                            <li><strong>Trade-offs:</strong>
+                                <ul>
+                                    <li><strong>Small chunks (200-300 tokens):</strong> Precise but may lack context</li>
+                                    <li><strong>Large chunks (800-1000 tokens):</strong> More context but noisy retrieval</li>
+                                    <li><strong>Overlap:</strong> Helps continuity but increases storage</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Cross-Questions:</h4>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "What chunk size did you choose and why?"</strong>
+                            <p><strong>Answer:</strong> Started with 1000 characters (~250 tokens) with 50-character overlap. Chosen based on balancing context (need enough for meaning) and precision (not too much noise). Will A/B test different sizes.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "Have you experimented with semantic chunking vs fixed-size chunking?"</strong>
+                            <p><strong>Answer:</strong> Currently using fixed-size for simplicity. Semantic chunking (by paragraphs, sections) is planned enhancement. Would use NLP libraries like spaCy for sentence detection.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "How do you handle code snippets vs prose differently?"</strong>
+                            <p><strong>Answer:</strong> Code requires different chunking—preserve function/class boundaries. Would detect code blocks and use language-specific parsers. Separate chunk size for code (larger to keep functions intact).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q3: Explain text embeddings. What embedding model are you using?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ul>
+                            <li><strong>What are Embeddings:</strong>
+                                <ul>
+                                    <li>Dense vector representations of text (e.g., 1536 dimensions)</li>
+                                    <li>Capture semantic meaning, not just keywords</li>
+                                    <li>Similar meanings = similar vectors (measured by cosine similarity)</li>
+                                    <li>Positions in high-dimensional space reflect relationships</li>
+                                </ul>
+                            </li>
+                            <li><strong>Model Used:</strong>
+                                <ul>
+                                    <li>OpenAI's <code>text-embedding-ada-002</code> or <code>text-embedding-3-small</code></li>
+                                    <li>1536 dimensions for ada-002</li>
+                                    <li>Cost: $0.0001 per 1K tokens</li>
+                                    <li>State-of-the-art performance on MTEB benchmarks</li>
+                                </ul>
+                            </li>
+                            <li><strong>How They Work:</strong>
+                                <ul>
+                                    <li>Trained on massive text corpora</li>
+                                    <li>Learn contextual relationships</li>
+                                    <li>"King - Man + Woman ≈ Queen" (semantic algebra)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Cross-Questions:</h4>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "Why not use open-source models like sentence-transformers?"</strong>
+                            <p><strong>Answer:</strong> Could use <code>all-MiniLM-L6-v2</code> or <code>all-mpnet-base-v2</code> for cost savings and offline operation. OpenAI embeddings offer superior quality but at cost. For production, would benchmark both.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "What's the cost consideration for OpenAI embeddings?"</strong>
+                            <p><strong>Answer:</strong> $0.0001/1K tokens. For 1M chunks (avg 250 tokens each), cost ~$25. Need to budget for re-embedding on model updates. Consider caching and batch processing.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "How do you handle embedding API rate limits?"</strong>
+                            <p><strong>Answer:</strong> Batch requests (up to 100 per call), implement exponential backoff, queue system for large jobs, consider self-hosted models for high volume.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q4: How does vector similarity search work in your system?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ol>
+                            <li>User query gets embedded (same model as documents)</li>
+                            <li>ChromaDB performs nearest neighbor search</li>
+                            <li>Computes cosine similarity between query vector and all document vectors</li>
+                            <li>Returns top-K most similar chunks (typically K=3-5)</li>
+                            <li>Optionally applies metadata filters</li>
+                        </ol>
+                        <ul>
+                            <li><strong>Distance Metrics:</strong>
+                                <ul>
+                                    <li><strong>Cosine Similarity:</strong> Measures angle between vectors (0-1, higher = more similar)</li>
+                                    <li><strong>Euclidean (L2):</strong> Straight-line distance in space</li>
+                                    <li><strong>Dot Product:</strong> Combines magnitude and direction</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Cross-Questions:</h4>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "What's the difference between cosine similarity and L2 distance?"</strong>
+                            <p><strong>Answer:</strong> Cosine measures direction (angle), ignoring magnitude—good for text where length varies. L2 measures absolute distance—sensitive to magnitude. For normalized embeddings, they're equivalent.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "How do you determine the optimal K value?"</strong>
+                            <p><strong>Answer:</strong> Experiment with different K values (3, 5, 10). Too low = miss relevant context. Too high = introduce noise. Depends on chunk size and document diversity. Would use retrieval metrics (Recall@K).</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "What about hybrid search (vector + keyword)?"</strong>
+                            <p><strong>Answer:</strong> Combine vector search with BM25 (keyword ranking). ChromaDB supports this. Use weighted combination (e.g., 70% vector, 30% keyword) for best of both worlds.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q5: Walk me through your ingestion pipeline.</h3>
+
+                    <div class="answer-section">
+                        <h4>Step-by-Step Flow:</h4>
+                        <ol>
+                            <li><strong>Document Acquisition:</strong> Connectors fetch documents (upload, scrape, API)</li>
+                            <li><strong>Text Extraction:</strong> Parse file formats (PDF via PyPDF2, DOCX, HTML)</li>
+                            <li><strong>Preprocessing:</strong> Clean text, normalize whitespace, handle encoding</li>
+                            <li><strong>Chunking:</strong> Split into overlapping segments with metadata</li>
+                            <li><strong>Embedding:</strong> Generate vectors for each chunk</li>
+                            <li><strong>Storage:</strong> Save to ChromaDB with metadata (source, timestamp, chunk_index)</li>
+                            <li><strong>Indexing:</strong> Build search indices for fast retrieval</li>
+                        </ol>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Cross-Questions:</h4>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "What metadata do you store with each chunk?"</strong>
+                            <p><strong>Answer:</strong></p>
+                            <ul>
+                                <li><code>document_id</code>, <code>chunk_index</code>, <code>source_url/file_path</code></li>
+                                <li><code>timestamp</code>, <code>document_title</code>, <code>author</code></li>
+                                <li><code>start_char</code>, <code>end_char</code> (position in original doc)</li>
+                                <li><code>chunk_size</code>, <code>overlap_size</code></li>
+                                <li>Custom tags/categories for filtering</li>
+                            </ul>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "How do you handle failed ingestion jobs?"</strong>
+                            <p><strong>Answer:</strong> Dead letter queue for failed chunks, retry with exponential backoff, alert on persistent failures, manual review interface, job status tracking.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Implementation Questions -->
+            <section id="technical" class="section">
+                <h2><span class="badge badge-technical">Technical Implementation</span></h2>
+
+                <div class="question-block">
+                    <h3>Q6: How do you handle API failures (OpenAI, ChromaDB)?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ul>
+                            <li><strong>Retry Logic:</strong>
+                                <ul>
+                                    <li>Exponential backoff (1s, 2s, 4s, 8s...)</li>
+                                    <li>Max retry attempts (3-5)</li>
+                                    <li>Retry only on transient errors (429, 500, 503)</li>
+                                    <li>Don't retry on 400, 401, 403</li>
+                                </ul>
+                            </li>
+                            <li><strong>Circuit Breaker Pattern:</strong>
+                                <ul>
+                                    <li>After N consecutive failures, open circuit</li>
+                                    <li>Fail fast without calling API</li>
+                                    <li>Periodically test if service recovered</li>
+                                </ul>
+                            </li>
+                            <li><strong>Fallback Mechanisms:</strong>
+                                <ul>
+                                    <li>Cache previous results</li>
+                                    <li>Degraded mode (return partial results)</li>
+                                    <li>Alternative providers</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q7: Explain your FastAPI endpoint design.</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ul>
+                            <li><strong>RESTful Principles:</strong>
+                                <ul>
+                                    <li><code>/ingest</code> (POST) - create ingestion job</li>
+                                    <li><code>/query</code> (POST) - search and answer</li>
+                                    <li><code>/documents/{id}</code> (GET, DELETE) - manage documents</li>
+                                    <li><code>/health</code> (GET) - system status</li>
+                                </ul>
+                            </li>
+                            <li><strong>Request/Response Schemas:</strong> Pydantic models for validation</li>
+                            <li><strong>Dependency Injection:</strong> Services injected via <code>Depends()</code></li>
+                            <li><strong>Async/Await:</strong> All I/O operations async</li>
+                        </ul>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Cross-Questions:</h4>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "Why FastAPI over Flask/Django?"</strong>
+                            <p><strong>Answer:</strong> FastAPI has async support (critical for I/O-heavy RAG), automatic validation with Pydantic, built-in OpenAPI docs, high performance (comparable to Node/Go), modern Python (type hints).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q8: How would you scale this system?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ul>
+                            <li><strong>Horizontal Scaling:</strong> Multiple FastAPI instances behind load balancer</li>
+                            <li><strong>Database Scaling:</strong> ChromaDB in distributed mode or migrate to Pinecone/Weaviate</li>
+                            <li><strong>Queue System:</strong> Celery workers for ingestion with RabbitMQ/Redis</li>
+                            <li><strong>Caching:</strong> Redis for frequently accessed chunks</li>
+                            <li><strong>Performance:</strong> Database connection pooling, batch API requests, async I/O</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q9: What about testing strategy?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ul>
+                            <li><strong>Unit Tests:</strong> Test chunker logic, embedder with mocked API, vector store operations</li>
+                            <li><strong>Integration Tests:</strong> Full ingestion pipeline, end-to-end query flow, API endpoints</li>
+                            <li><strong>Mocking:</strong> Mock OpenAI API responses, ChromaDB operations, fixture data</li>
+                            <li><strong>Test Coverage:</strong> Aim for 80%+ coverage, critical paths 100%</li>
+                        </ul>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Cross-Questions:</h4>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "How do you test retrieval accuracy?"</strong>
+                            <p><strong>Answer:</strong> Create test dataset with questions and expected chunks, measure Recall@K and MRR, use BEIR benchmark datasets, human evaluation for edge cases.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q10: Security considerations in your RAG system?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer Coverage:</h4>
+                        <ul>
+                            <li><strong>API Security:</strong> Keys in environment variables, rotate regularly, secrets manager</li>
+                            <li><strong>Input Validation:</strong> Sanitize inputs, prevent injection, limit sizes</li>
+                            <li><strong>Access Control:</strong> Authentication, role-based access, audit logging</li>
+                            <li><strong>Data Security:</strong> Encryption at rest/transit, PII detection, compliance</li>
+                        </ul>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Cross-Questions:</h4>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "How do you prevent prompt injection?"</strong>
+                            <p><strong>Answer:</strong> Sanitize user queries, use system prompts that can't be overridden, separate user input from instructions, content filtering, limit query length, monitor for suspicious patterns.</p>
+                        </div>
+
+                        <div class="cross-question-item">
+                            <strong>Q: "What about PII in documents?"</strong>
+                            <p><strong>Answer:</strong> Run PII detection before ingestion (using libraries like <code>presidio</code>), mask/redact sensitive data, document retention policies, allow users to delete their data, compliance with privacy laws.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced/Tricky Questions -->
+            <section id="advanced" class="section">
+                <h2><span class="badge badge-advanced">Advanced/Tricky Questions</span></h2>
+
+                <div class="question-block">
+                    <h3>Q11: What is the "Lost in the Middle" problem in RAG?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer:</h4>
+                        <p>LLMs tend to focus on information at the <strong>beginning</strong> and <strong>end</strong> of the provided context, often ignoring or giving less weight to information in the <strong>middle</strong>. This was demonstrated in research showing recall drops significantly for facts in the middle of long contexts.</p>
+
+                        <p><strong>Impact on RAG:</strong> If you retrieve 10 chunks and concatenate them, the LLM might miss crucial information in chunks 4-7.</p>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Mitigation Strategies:</h4>
+                        <ul>
+                            <li>Reorder chunks: place most relevant at beginning and end</li>
+                            <li>Limit context to 3-5 chunks max</li>
+                            <li>Use multiple queries with subset of chunks</li>
+                            <li>Summarize middle chunks</li>
+                            <li>Use advanced prompting (instruct model to read all carefully)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q12: How do you evaluate RAG system performance?</h3>
+
+                    <div class="answer-section">
+                        <h4>Retrieval Metrics:</h4>
+                        <ul>
+                            <li><strong>Recall@K:</strong> % of relevant chunks in top-K results</li>
+                            <li><strong>Precision@K:</strong> % of retrieved chunks that are relevant</li>
+                            <li><strong>MRR:</strong> Mean Reciprocal Rank - 1/rank of first relevant chunk</li>
+                            <li><strong>NDCG:</strong> Normalized discounted cumulative gain</li>
+                        </ul>
+
+                        <h4>Generation Metrics:</h4>
+                        <ul>
+                            <li><strong>BLEU/ROUGE:</strong> Compare to reference answers</li>
+                            <li><strong>BERTScore:</strong> Semantic similarity using embeddings</li>
+                            <li><strong>Human evaluation:</strong> Relevance, correctness, fluency</li>
+                        </ul>
+
+                        <h4>End-to-End Metrics:</h4>
+                        <ul>
+                            <li>Answer Correctness, Answer Relevance, Context Relevance</li>
+                            <li>Latency (p50, p95, p99)</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>Key Insight:</strong> Retrieval is MORE critical than generation. "Garbage in, garbage out"—even the best LLM can't answer correctly with wrong context.
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q13: What's the context window limitation problem?</h3>
+
+                    <div class="answer-section">
+                        <h4>Expected Answer:</h4>
+                        <p>LLMs have token limits:</p>
+                        <ul>
+                            <li>GPT-3.5: 4K tokens</li>
+                            <li>GPT-4: 8K or 32K tokens</li>
+                            <li>GPT-4 Turbo: 128K tokens</li>
+                        </ul>
+                        <p>If you retrieve 10 chunks of 500 tokens each = 5000 tokens. Add system prompt, user query, and there's not much room left.</p>
+                    </div>
+
+                    <div class="cross-questions">
+                        <h4>Solutions:</h4>
+                        <ul>
+                            <li>Retrieve top-3 chunks instead of 10</li>
+                            <li>Compress/summarize chunks before sending</li>
+                            <li>Use re-ranking to select most relevant subset</li>
+                            <li>Truncate chunks to fit limit</li>
+                            <li>Use models with larger context (GPT-4 Turbo, Claude)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q14: What are hallucinations in RAG and how do you prevent them?</h3>
+
+                    <div class="answer-section">
+                        <h4>Definition:</h4>
+                        <p><strong>Hallucinations:</strong> LLM generates information not present in the retrieved context (makes things up).</p>
+
+                        <h4>Causes in RAG:</h4>
+                        <ul>
+                            <li>Retrieved context doesn't answer the question</li>
+                            <li>LLM relies on training data instead of provided context</li>
+                            <li>Ambiguous or contradictory context</li>
+                            <li>Poor prompt engineering</li>
+                        </ul>
+
+                        <h4>Prevention Strategies:</h4>
+                        <ul>
+                            <li><strong>Prompt Engineering:</strong> Explicitly instruct "Only use provided context"</li>
+                            <li><strong>Retrieval Quality:</strong> Ensure high-quality, relevant chunks</li>
+                            <li><strong>Confidence Thresholds:</strong> Reject queries with low retrieval scores</li>
+                            <li><strong>Post-Processing:</strong> Check if answer facts appear in context</li>
+                            <li><strong>Few-Shot Examples:</strong> Show model how to stick to context</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning">
+                        <strong>Important:</strong> Hallucinations cannot be eliminated entirely. LLMs are probabilistic. For critical applications, always have human-in-the-loop review.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Behavioral Questions -->
+            <section id="behavioral" class="section">
+                <h2><span class="badge badge-behavioral">Behavioral Questions</span></h2>
+
+                <div class="question-block">
+                    <h3>Q15: Walk me through a challenging problem you faced in this project.</h3>
+
+                    <div class="answer-section">
+                        <h4>Example Answer:</h4>
+                        <p>"One challenge was optimizing retrieval latency. Initially, embedding each query and searching ChromaDB was taking 2-3 seconds, which is too slow for user experience.</p>
+
+                        <p><strong>What I did:</strong></p>
+                        <ol>
+                            <li>Profiled the code and found embedding API call was the bottleneck</li>
+                            <li>Implemented caching for repeated queries using Redis (30% of queries were repeats)</li>
+                            <li>Switched to batch processing for multiple queries</li>
+                            <li>Optimized ChromaDB indexing parameters</li>
+                            <li>Reduced latency to ~500ms p95</li>
+                        </ol>
+
+                        <p><strong>Result:</strong> 5x improvement in latency, better user satisfaction."</p>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q16: How do you stay updated with RAG and LLM developments?</h3>
+
+                    <div class="answer-section">
+                        <h4>Good Answer Points:</h4>
+                        <ul>
+                            <li>Read research papers (arXiv, especially NeurIPS, ACL)</li>
+                            <li>Follow key researchers on Twitter/X</li>
+                            <li>Read blogs (OpenAI, Anthropic, LangChain)</li>
+                            <li>Participate in communities (r/MachineLearning, Discord groups)</li>
+                            <li>Experiment with new models/techniques</li>
+                            <li>Attend conferences/webinars</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <h3>Q17: If you had unlimited resources, how would you improve this system?</h3>
+
+                    <div class="answer-section">
+                        <h4>Ideas to Mention:</h4>
+                        <ul>
+                            <li>Fine-tune embedding models on domain data</li>
+                            <li>Build custom re-ranker models</li>
+                            <li>Implement multi-modal RAG (images, tables, charts)</li>
+                            <li>Advanced query understanding (entity recognition, intent detection)</li>
+                            <li>Conversational memory (multi-turn dialogues)</li>
+                            <li>Active learning (learn from user feedback)</li>
+                            <li>Explainability (show which chunks led to answer)</li>
+                            <li>Multi-language support</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Metrics Reference -->
+            <section id="metrics" class="section">
+                <h2>Key Metrics & Numbers Reference</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Typical Value</th>
+                            <th>Your Target (AuraRAG)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Chunk Size</td>
+                            <td>500-1000 tokens</td>
+                            <td>1000 chars (~250 tokens)</td>
+                        </tr>
+                        <tr>
+                            <td>Chunk Overlap</td>
+                            <td>10-20%</td>
+                            <td>5% (50 chars)</td>
+                        </tr>
+                        <tr>
+                            <td>Top-K Retrieval</td>
+                            <td>3-5 chunks</td>
+                            <td>5 chunks</td>
+                        </tr>
+                        <tr>
+                            <td>Embedding Dimension</td>
+                            <td>1536 (ada-002)</td>
+                            <td>1536</td>
+                        </tr>
+                        <tr>
+                            <td>Query Latency (p95)</td>
+                            <td>&lt;1 second</td>
+                            <td>500ms target</td>
+                        </tr>
+                        <tr>
+                            <td>Ingestion Throughput</td>
+                            <td>100+ docs/min</td>
+                            <td>TBD</td>
+                        </tr>
+                        <tr>
+                            <td>Similarity Threshold</td>
+                            <td>0.7-0.8</td>
+                            <td>0.75</td>
+                        </tr>
+                        <tr>
+                            <td>Context Window</td>
+                            <td>4K-128K tokens</td>
+                            <td>Depends on model</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Resources -->
+            <section id="resources" class="section">
+                <h2>Resources for Further Study</h2>
+
+                <div class="resources">
+                    <h4>📚 Key Papers:</h4>
+                    <ul>
+                        <li>"Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (Lewis et al., 2020)</li>
+                        <li>"Lost in the Middle" (Liu et al., 2023)</li>
+                        <li>"REALM: Retrieval-Augmented Language Model Pre-Training" (Guu et al., 2020)</li>
+                    </ul>
+                </div>
+
+                <div class="resources">
+                    <h4>🛠️ Tools/Libraries:</h4>
+                    <ul>
+                        <li>LangChain - RAG framework</li>
+                        <li>LlamaIndex - Data framework for LLMs</li>
+                        <li>Haystack - End-to-end NLP framework</li>
+                        <li>ChromaDB, Pinecone, Weaviate - Vector databases</li>
+                    </ul>
+                </div>
+
+                <div class="resources">
+                    <h4>📊 Benchmarks:</h4>
+                    <ul>
+                        <li>BEIR - Retrieval benchmark</li>
+                        <li>MTEB - Embedding benchmark</li>
+                        <li>MS MARCO - Q&A benchmark</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <h4>⚠️ Common Mistakes to Avoid in Interviews:</h4>
+                    <ol>
+                        <li><strong>Don't oversimplify:</strong> "RAG just retrieves and generates"—go deeper</li>
+                        <li><strong>Don't ignore trade-offs:</strong> Every choice has pros/cons, acknowledge them</li>
+                        <li><strong>Don't claim perfection:</strong> "My system never hallucinates"—be realistic</li>
+                        <li><strong>Don't skip details:</strong> Explain HOW things work, not just WHAT</li>
+                        <li><strong>Don't forget about production:</strong> Talk about monitoring, scaling, errors</li>
+                        <li><strong>Don't ignore costs:</strong> OpenAI API isn't free, show awareness</li>
+                        <li><strong>Don't memorize:</strong> Understand concepts, explain in your own words</li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>AuraRAG Project</strong> | Interview Preparation Guide</p>
+            <p>Good luck with your interviews! Remember: <strong>Confidence + Clarity + Depth = Success</strong></p>
+        </footer>
+    </div>
+
+    <a href="#" class="back-to-top" title="Back to Top">↑</a>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Back to top button
+        document.querySelector('.back-to-top').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Show/hide back to top button based on scroll position
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.style.display = 'flex';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

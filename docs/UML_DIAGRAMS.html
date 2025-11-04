@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraRAG - UML & ER Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        nav ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        nav a {
+            color: #495057;
+            text-decoration: none;
+            padding: 8px 12px;
+            display: block;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .section h3 {
+            color: #495057;
+            margin: 30px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .diagram-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+            overflow-x: auto;
+        }
+
+        .diagram-description {
+            background: #e7f3ff;
+            border-left: 5px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .diagram-description h4 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .tech-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .tech-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .tech-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tech-card li:before {
+            content: "▸ ";
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .legend {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .legend h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin: 10px 20px 10px 0;
+        }
+
+        .legend-symbol {
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            margin-right: 10px;
+            vertical-align: middle;
+            border-radius: 3px;
+        }
+
+        .mermaid {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5em;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .back-to-top:hover {
+            background: #764ba2;
+            transform: translateY(-5px);
+        }
+
+        .relationships-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .relationships-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .relationships-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .relationships-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            .content {
+                padding: 20px;
+            }
+            nav ul {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 AuraRAG System Architecture</h1>
+            <p>UML & Entity Relationship Diagrams</p>
+        </header>
+
+        <nav>
+            <h3>Quick Navigation</h3>
+            <ul>
+                <li><a href="#tech-stack">Tech Stack Overview</a></li>
+                <li><a href="#system-architecture">System Architecture</a></li>
+                <li><a href="#class-diagram">Class Diagram</a></li>
+                <li><a href="#sequence-ingestion">Sequence: Ingestion</a></li>
+                <li><a href="#sequence-query">Sequence: Query</a></li>
+                <li><a href="#er-diagram">Entity Relationship Diagram</a></li>
+                <li><a href="#component-diagram">Component Diagram</a></li>
+                <li><a href="#deployment">Deployment Architecture</a></li>
+                <li><a href="#relationships">Code Relationships</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <!-- Tech Stack Overview -->
+            <section id="tech-stack" class="section">
+                <h2>🛠️ Tech Stack Overview</h2>
+
+                <div class="tech-stack">
+                    <div class="tech-card">
+                        <h4>Backend Framework</h4>
+                        <ul>
+                            <li>FastAPI (Async Python)</li>
+                            <li>Uvicorn (ASGI Server)</li>
+                            <li>Pydantic (Validation)</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>AI/ML Services</h4>
+                        <ul>
+                            <li>OpenAI API (Embeddings & GPT)</li>
+                            <li>Text-embedding-ada-002</li>
+                            <li>GPT-4 / GPT-3.5-turbo</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>Vector Database</h4>
+                        <ul>
+                            <li>ChromaDB (Primary)</li>
+                            <li>Supports metadata filtering</li>
+                            <li>Persistent storage</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>Storage & Cache</h4>
+                        <ul>
+                            <li>S3 (Document storage)</li>
+                            <li>Redis (Caching - planned)</li>
+                            <li>Local file system (Dev)</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>Task Queue (Planned)</h4>
+                        <ul>
+                            <li>Celery (Background tasks)</li>
+                            <li>RabbitMQ/Redis (Broker)</li>
+                            <li>Async ingestion</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>Deployment</h4>
+                        <ul>
+                            <li>Docker containers</li>
+                            <li>Kubernetes (EKS)</li>
+                            <li>AWS infrastructure</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>Monitoring</h4>
+                        <ul>
+                            <li>Prometheus (Metrics)</li>
+                            <li>Grafana (Dashboards)</li>
+                            <li>Structured logging</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>Development</h4>
+                        <ul>
+                            <li>Python 3.11+</li>
+                            <li>pytest (Testing)</li>
+                            <li>Git (Version control)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Architecture -->
+            <section id="system-architecture" class="section">
+                <h2>🏗️ System Architecture</h2>
+
+                <div class="diagram-description">
+                    <h4>Overview</h4>
+                    <p>High-level architecture showing the complete data flow from user requests through ingestion, storage, retrieval, and response generation.</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+graph TB
+    subgraph "Client Layer"
+        WEB[Web Application]
+        API_CLIENT[API Clients]
+        ADMIN[Admin Dashboard]
+    end
+
+    subgraph "API Gateway Layer"
+        FASTAPI[FastAPI Application<br/>main.py]
+        ROUTES[API Routes]
+        MIDDLEWARE[Middleware & Auth]
+    end
+
+    subgraph "Service Layer"
+        EMBED_SVC[EmbeddingService<br/>embedding_service.py]
+        VECTOR_SVC[VectorStoreService<br/>vector_store.py]
+        QUERY_SVC[QueryService<br/>query_service.py]
+        LLM_SVC[LLMService<br/>llm_service.py]
+    end
+
+    subgraph "Ingestion Pipeline"
+        CONNECTORS[Document Connectors<br/>PDF, Web, API]
+        PREPROCESSOR[Text Preprocessor]
+        CHUNKER[TextChunker<br/>chunker.py]
+        PIPELINE[Ingestion Pipeline]
+    end
+
+    subgraph "Storage Layer"
+        CHROMADB[(ChromaDB<br/>Vector Store)]
+        S3[(S3 / File Storage<br/>Documents)]
+        CACHE[(Redis Cache<br/>Optional)]
+    end
+
+    subgraph "External Services"
+        OPENAI[OpenAI API<br/>Embeddings & GPT]
+    end
+
+    subgraph "Dependencies"
+        CONFIG[Configuration<br/>config.py]
+        DEPS[Dependency Injection<br/>dependencies.py]
+        SCHEMAS[Pydantic Schemas<br/>Request/Response Models]
+    end
+
+    WEB --> FASTAPI
+    API_CLIENT --> FASTAPI
+    ADMIN --> FASTAPI
+
+    FASTAPI --> ROUTES
+    ROUTES --> MIDDLEWARE
+
+    MIDDLEWARE --> EMBED_SVC
+    MIDDLEWARE --> VECTOR_SVC
+    MIDDLEWARE --> QUERY_SVC
+    MIDDLEWARE --> LLM_SVC
+
+    CONNECTORS --> PREPROCESSOR
+    PREPROCESSOR --> CHUNKER
+    CHUNKER --> PIPELINE
+    PIPELINE --> EMBED_SVC
+    EMBED_SVC --> VECTOR_SVC
+
+    EMBED_SVC --> OPENAI
+    LLM_SVC --> OPENAI
+
+    VECTOR_SVC --> CHROMADB
+    PIPELINE --> S3
+    QUERY_SVC --> CACHE
+
+    CONFIG --> DEPS
+    DEPS --> EMBED_SVC
+    DEPS --> VECTOR_SVC
+    SCHEMAS --> ROUTES
+
+    style FASTAPI fill:#667eea,color:#fff
+    style EMBED_SVC fill:#28a745,color:#fff
+    style VECTOR_SVC fill:#28a745,color:#fff
+    style CHROMADB fill:#ffc107,color:#333
+    style OPENAI fill:#dc3545,color:#fff
+                    </div>
+                </div>
+            </section>
+
+            <!-- Class Diagram -->
+            <section id="class-diagram" class="section">
+                <h2>📦 Class Diagram</h2>
+
+                <div class="diagram-description">
+                    <h4>Purpose</h4>
+                    <p>Shows all classes, their attributes, methods, and relationships in the AuraRAG codebase.</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+classDiagram
+    class FastAPIApp {
+        -title: str
+        -version: str
+        +get_root() dict
+        +get_health() dict
+        +register_routes()
+    }
+
+    class TextChunker {
+        -chunk_size: int
+        -overlap: int
+        +__init__(chunk_size, overlap)
+        +chunk_text(text: str) list[dict]
+        -_validate_input(text: str) bool
+    }
+
+    class EmbeddingService {
+        -api_key: str
+        -model: str
+        -client: OpenAI
+        +__init__(api_key, model)
+        +generate_embedding(text: str) list[float]
+        +generate_embeddings_batch(texts: list) list[list[float]]
+        +get_embedding_dimension() int
+        -_retry_with_backoff()
+    }
+
+    class VectorStoreService {
+        -collection_name: str
+        -client: ChromaClient
+        -persist_directory: str
+        +__init__(collection_name, persist_directory)
+        +add_documents(chunks: list, embeddings: list) bool
+        +search(query_embedding: list, top_k: int) list[dict]
+        +delete_document(document_id: str) bool
+        +get_collection_stats() dict
+    }
+
+    class QueryService {
+        -embedding_service: EmbeddingService
+        -vector_store: VectorStoreService
+        -llm_service: LLMService
+        +__init__(embedding_svc, vector_svc, llm_svc)
+        +process_query(query: str) dict
+        +retrieve_context(query: str, top_k: int) list[dict]
+        -_rerank_results(results: list) list
+    }
+
+    class LLMService {
+        -api_key: str
+        -model: str
+        -client: OpenAI
+        +__init__(api_key, model)
+        +generate_response(prompt: str, context: list) str
+        +generate_streaming_response() Iterator
+        -_build_prompt(query: str, context: list) str
+    }
+
+    class DocumentConnector {
+        <<abstract>>
+        +connect()
+        +fetch_documents() list
+        +extract_text(document) str
+    }
+
+    class PDFConnector {
+        -file_path: str
+        +connect()
+        +extract_text(pdf_file) str
+        -_parse_pdf(file) str
+    }
+
+    class WebConnector {
+        -url: str
+        -headers: dict
+        +connect()
+        +fetch_content() str
+        +extract_text(html) str
+    }
+
+    class IngestionPipeline {
+        -connector: DocumentConnector
+        -preprocessor: TextPreprocessor
+        -chunker: TextChunker
+        -embedding_service: EmbeddingService
+        -vector_store: VectorStoreService
+        +__init__(dependencies)
+        +run(source) dict
+        +process_document(document) bool
+        -_validate_document(document) bool
+    }
+
+    class TextPreprocessor {
+        +clean_text(text: str) str
+        +normalize_whitespace(text: str) str
+        +remove_special_chars(text: str) str
+        +handle_encoding(text: str) str
+    }
+
+    class DocumentSchema {
+        <<Pydantic>>
+        +document_id: str
+        +source: str
+        +content: str
+        +metadata: dict
+        +created_at: datetime
+    }
+
+    class QueryRequest {
+        <<Pydantic>>
+        +query: str
+        +top_k: int
+        +filters: dict
+    }
+
+    class QueryResponse {
+        <<Pydantic>>
+        +answer: str
+        +chunks: list[ChunkWithScore]
+        +metadata: dict
+    }
+
+    class ChunkMetadata {
+        <<Pydantic>>
+        +chunk_index: int
+        +start_char: int
+        +end_char: int
+        +document_id: str
+        +source: str
+    }
+
+    class Config {
+        <<Pydantic Settings>>
+        +openai_api_key: str
+        +chroma_persist_dir: str
+        +chunk_size: int
+        +chunk_overlap: int
+        +embedding_model: str
+        +llm_model: str
+    }
+
+    class Dependencies {
+        +get_embedding_service() EmbeddingService
+        +get_vector_store() VectorStoreService
+        +get_query_service() QueryService
+        +get_config() Config
+    }
+
+    %% Relationships
+    FastAPIApp ..> Dependencies : uses
+    FastAPIApp ..> QueryRequest : validates
+    FastAPIApp ..> QueryResponse : returns
+
+    QueryService --> EmbeddingService : uses
+    QueryService --> VectorStoreService : uses
+    QueryService --> LLMService : uses
+
+    IngestionPipeline --> DocumentConnector : uses
+    IngestionPipeline --> TextPreprocessor : uses
+    IngestionPipeline --> TextChunker : uses
+    IngestionPipeline --> EmbeddingService : uses
+    IngestionPipeline --> VectorStoreService : uses
+
+    PDFConnector --|> DocumentConnector : inherits
+    WebConnector --|> DocumentConnector : inherits
+
+    EmbeddingService ..> Config : reads
+    VectorStoreService ..> Config : reads
+    LLMService ..> Config : reads
+
+    TextChunker ..> ChunkMetadata : creates
+    VectorStoreService ..> ChunkMetadata : stores
+    QueryService ..> QueryResponse : returns
+
+    Dependencies --> EmbeddingService : provides
+    Dependencies --> VectorStoreService : provides
+    Dependencies --> QueryService : provides
+                    </div>
+                </div>
+
+                <div class="legend">
+                    <h4>Class Diagram Legend</h4>
+                    <div class="legend-item">
+                        <span class="legend-symbol" style="background: #667eea;"></span>
+                        <strong>Concrete Class</strong> - Fully implemented
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol" style="background: #28a745;"></span>
+                        <strong>Service Class</strong> - Business logic
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol" style="background: #ffc107;"></span>
+                        <strong>Pydantic Schema</strong> - Data validation
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol" style="background: #dc3545;"></span>
+                        <strong>Abstract Class</strong> - Interface/Base
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sequence Diagram: Ingestion -->
+            <section id="sequence-ingestion" class="section">
+                <h2>🔄 Sequence Diagram: Document Ingestion</h2>
+
+                <div class="diagram-description">
+                    <h4>Flow Description</h4>
+                    <p>This diagram shows the complete lifecycle of document ingestion, from upload to storage in the vector database.</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant Client
+    participant FastAPI as FastAPI<br/>main.py
+    participant Pipeline as IngestionPipeline
+    participant Connector as DocumentConnector
+    participant Preprocessor as TextPreprocessor
+    participant Chunker as TextChunker
+    participant EmbedSvc as EmbeddingService
+    participant OpenAI as OpenAI API
+    participant VectorSvc as VectorStoreService
+    participant ChromaDB as ChromaDB
+    participant S3 as S3 Storage
+
+    Client->>FastAPI: POST /ingest (file/url)
+    activate FastAPI
+    FastAPI->>FastAPI: Validate request schema
+    FastAPI->>Pipeline: run(source)
+    activate Pipeline
+
+    Pipeline->>Connector: fetch_documents()
+    activate Connector
+    Connector->>Connector: connect() & download
+    Connector-->>Pipeline: raw_document
+    deactivate Connector
+
+    Pipeline->>Preprocessor: clean_text(raw_text)
+    activate Preprocessor
+    Preprocessor->>Preprocessor: normalize & remove noise
+    Preprocessor-->>Pipeline: cleaned_text
+    deactivate Preprocessor
+
+    Pipeline->>Chunker: chunk_text(cleaned_text)
+    activate Chunker
+    Chunker->>Chunker: split with overlap
+    Chunker-->>Pipeline: list[chunk_dicts]
+    deactivate Chunker
+
+    Pipeline->>S3: store_original_document()
+    S3-->>Pipeline: document_id
+
+    loop For each chunk
+        Pipeline->>EmbedSvc: generate_embedding(chunk_text)
+        activate EmbedSvc
+        EmbedSvc->>OpenAI: POST /embeddings
+        activate OpenAI
+        OpenAI-->>EmbedSvc: embedding_vector[1536]
+        deactivate OpenAI
+        EmbedSvc-->>Pipeline: embedding
+        deactivate EmbedSvc
+
+        Pipeline->>VectorSvc: add_documents(chunk, embedding)
+        activate VectorSvc
+        VectorSvc->>ChromaDB: insert(id, vector, metadata)
+        ChromaDB-->>VectorSvc: success
+        VectorSvc-->>Pipeline: chunk_id
+        deactivate VectorSvc
+    end
+
+    Pipeline-->>FastAPI: ingestion_result
+    deactivate Pipeline
+    FastAPI-->>Client: {status: "success", chunks: N}
+    deactivate FastAPI
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sequence Diagram: Query -->
+            <section id="sequence-query" class="section">
+                <h2>🔍 Sequence Diagram: Query Processing</h2>
+
+                <div class="diagram-description">
+                    <h4>Flow Description</h4>
+                    <p>This diagram illustrates how a user query is processed through embedding, retrieval, and response generation.</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant User
+    participant FastAPI as FastAPI<br/>main.py
+    participant QuerySvc as QueryService
+    participant Cache as Redis Cache<br/>(Optional)
+    participant EmbedSvc as EmbeddingService
+    participant OpenAI as OpenAI API
+    participant VectorSvc as VectorStoreService
+    participant ChromaDB as ChromaDB
+    participant LLMSvc as LLMService
+
+    User->>FastAPI: POST /query {query: "..."}
+    activate FastAPI
+    FastAPI->>FastAPI: Validate QueryRequest
+    FastAPI->>QuerySvc: process_query(query_text)
+    activate QuerySvc
+
+    QuerySvc->>Cache: check_cache(query_hash)
+    alt Cache Hit
+        Cache-->>QuerySvc: cached_response
+        QuerySvc-->>FastAPI: cached_result
+    else Cache Miss
+        QuerySvc->>EmbedSvc: generate_embedding(query_text)
+        activate EmbedSvc
+        EmbedSvc->>OpenAI: POST /embeddings
+        OpenAI-->>EmbedSvc: query_vector[1536]
+        EmbedSvc-->>QuerySvc: query_embedding
+        deactivate EmbedSvc
+
+        QuerySvc->>VectorSvc: search(query_embedding, top_k=5)
+        activate VectorSvc
+        VectorSvc->>ChromaDB: kNN similarity search
+        activate ChromaDB
+        ChromaDB->>ChromaDB: cosine similarity
+        ChromaDB-->>VectorSvc: top_k chunks + scores
+        deactivate ChromaDB
+        VectorSvc-->>QuerySvc: relevant_chunks
+        deactivate VectorSvc
+
+        QuerySvc->>QuerySvc: rerank_results(chunks)
+        QuerySvc->>QuerySvc: build_context(chunks)
+
+        QuerySvc->>LLMSvc: generate_response(query, context)
+        activate LLMSvc
+        LLMSvc->>LLMSvc: build_prompt(query, context)
+        LLMSvc->>OpenAI: POST /chat/completions
+        activate OpenAI
+        OpenAI-->>LLMSvc: completion_text
+        deactivate OpenAI
+        LLMSvc-->>QuerySvc: answer
+        deactivate LLMSvc
+
+        QuerySvc->>Cache: store_cache(query_hash, result)
+        QuerySvc-->>FastAPI: QueryResponse{answer, chunks}
+    end
+    deactivate QuerySvc
+
+    FastAPI-->>User: {answer: "...", chunks: [...]}
+    deactivate FastAPI
+                    </div>
+                </div>
+            </section>
+
+            <!-- Entity Relationship Diagram -->
+            <section id="er-diagram" class="section">
+                <h2>🗄️ Entity Relationship Diagram</h2>
+
+                <div class="diagram-description">
+                    <h4>Data Model</h4>
+                    <p>Shows the relationships between data entities in the AuraRAG system.</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+erDiagram
+    DOCUMENT ||--o{ CHUNK : contains
+    CHUNK ||--|| EMBEDDING : has
+    CHUNK ||--o{ METADATA : includes
+    DOCUMENT ||--o{ METADATA : has
+    COLLECTION ||--o{ CHUNK : stores
+    QUERY ||--o{ QUERY_RESULT : produces
+    QUERY_RESULT }o--|| CHUNK : references
+    USER ||--o{ QUERY : makes
+    USER ||--o{ DOCUMENT : uploads
+
+    DOCUMENT {
+        string document_id PK
+        string source_url
+        string file_path
+        string title
+        string content_type
+        text raw_content
+        datetime created_at
+        datetime updated_at
+        string status
+        int file_size
+        string hash
+    }
+
+    CHUNK {
+        string chunk_id PK
+        string document_id FK
+        int chunk_index
+        text text_content
+        int start_char
+        int end_char
+        int token_count
+        string collection_id FK
+        datetime created_at
+    }
+
+    EMBEDDING {
+        string embedding_id PK
+        string chunk_id FK
+        float[] vector
+        int dimension
+        string model_name
+        datetime created_at
+    }
+
+    METADATA {
+        string metadata_id PK
+        string entity_id FK
+        string entity_type
+        string key
+        string value
+        datetime created_at
+    }
+
+    COLLECTION {
+        string collection_id PK
+        string collection_name
+        string description
+        int total_chunks
+        datetime created_at
+        datetime last_updated
+    }
+
+    QUERY {
+        string query_id PK
+        string user_id FK
+        text query_text
+        float[] query_embedding
+        int top_k
+        json filters
+        datetime created_at
+        int response_time_ms
+    }
+
+    QUERY_RESULT {
+        string result_id PK
+        string query_id FK
+        string chunk_id FK
+        float similarity_score
+        int rank
+        text answer_generated
+        datetime created_at
+    }
+
+    USER {
+        string user_id PK
+        string username
+        string email
+        string role
+        datetime created_at
+        datetime last_login
+    }
+                    </div>
+                </div>
+            </section>
+
+            <!-- Component Diagram -->
+            <section id="component-diagram" class="section">
+                <h2>🧩 Component Diagram</h2>
+
+                <div class="diagram-description">
+                    <h4>Component Organization</h4>
+                    <p>Shows how different components and modules are organized in the system.</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+graph TB
+    subgraph "src/"
+        subgraph "app/"
+            subgraph "api/"
+                ROUTES[routes/<br/>ingest.py, query.py]
+                API_INIT[__init__.py<br/>Router Registration]
+            end
+
+            subgraph "core/"
+                CONFIG[config.py<br/>Settings]
+                LOGGING[logging.py<br/>Log Config]
+                EXCEPTIONS[exceptions.py<br/>Error Handlers]
+            end
+
+            subgraph "deps/"
+                DEPENDENCIES[dependencies.py<br/>DI Container]
+            end
+
+            subgraph "models/"
+                DOMAIN_MODELS[document.py<br/>Domain Models]
+            end
+
+            subgraph "schemas/"
+                PYDANTIC_SCHEMAS[Request/Response<br/>Schemas]
+            end
+
+            subgraph "services/"
+                EMBEDDING[embedding_service.py]
+                VECTORSTORE[vector_store.py]
+                QUERY[query_service.py]
+                LLM[llm_service.py]
+                CACHE[cache_service.py]
+            end
+
+            subgraph "utils/"
+                TEXT_UTILS[text_utils.py]
+                PROMPTS[prompts.py]
+            end
+        end
+
+        subgraph "ingestion/"
+            subgraph "connectors/"
+                PDF[pdf_connector.py]
+                WEB[web_connector.py]
+                API_CONN[api_connector.py]
+            end
+
+            subgraph "pipelines/"
+                INGEST_PIPELINE[document_pipeline.py]
+            end
+
+            CHUNKER[chunker.py]
+            PREPROCESSOR[preprocessor.py]
+        end
+
+        MAIN[main.py<br/>FastAPI App]
+    end
+
+    subgraph "External Dependencies"
+        OPENAI_LIB[openai<br/>Python SDK]
+        CHROMA_LIB[chromadb<br/>Client]
+        FASTAPI_LIB[fastapi<br/>Framework]
+        PYDANTIC_LIB[pydantic<br/>Validation]
+    end
+
+    subgraph "External Services"
+        OPENAI_API[OpenAI API]
+        CHROMA_DB[ChromaDB Instance]
+        REDIS_INST[Redis Instance]
+        S3_BUCKET[S3 Bucket]
+    end
+
+    MAIN --> ROUTES
+    MAIN --> CONFIG
+    MAIN --> LOGGING
+    MAIN --> EXCEPTIONS
+
+    ROUTES --> DEPENDENCIES
+    DEPENDENCIES --> EMBEDDING
+    DEPENDENCIES --> VECTORSTORE
+    DEPENDENCIES --> QUERY
+    DEPENDENCIES --> CONFIG
+
+    QUERY --> EMBEDDING
+    QUERY --> VECTORSTORE
+    QUERY --> LLM
+    QUERY --> CACHE
+
+    INGEST_PIPELINE --> PDF
+    INGEST_PIPELINE --> WEB
+    INGEST_PIPELINE --> CHUNKER
+    INGEST_PIPELINE --> PREPROCESSOR
+    INGEST_PIPELINE --> EMBEDDING
+    INGEST_PIPELINE --> VECTORSTORE
+
+    EMBEDDING --> OPENAI_LIB
+    VECTORSTORE --> CHROMA_LIB
+    CACHE --> REDIS_INST
+    LLM --> OPENAI_LIB
+
+    OPENAI_LIB --> OPENAI_API
+    CHROMA_LIB --> CHROMA_DB
+    INGEST_PIPELINE --> S3_BUCKET
+
+    ROUTES --> PYDANTIC_SCHEMAS
+    MAIN --> FASTAPI_LIB
+    PYDANTIC_SCHEMAS --> PYDANTIC_LIB
+
+    style MAIN fill:#667eea,color:#fff
+    style EMBEDDING fill:#28a745,color:#fff
+    style VECTORSTORE fill:#28a745,color:#fff
+    style QUERY fill:#28a745,color:#fff
+    style OPENAI_API fill:#dc3545,color:#fff
+    style CHROMA_DB fill:#ffc107,color:#333
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deployment Architecture -->
+            <section id="deployment" class="section">
+                <h2>🚀 Deployment Architecture</h2>
+
+                <div class="diagram-description">
+                    <h4>Production Infrastructure</h4>
+                    <p>Shows how the system is deployed in a production Kubernetes environment.</p>
+                </div>
+
+                <div class="diagram-container">
+                    <div class="mermaid">
+graph TB
+    subgraph "User Layer"
+        USERS[End Users<br/>Web/Mobile/API]
+    end
+
+    subgraph "AWS Cloud"
+        subgraph "EKS Cluster"
+            subgraph "Namespace: aurarag-prod"
+                LB[Load Balancer<br/>Service]
+
+                subgraph "API Pods"
+                    API1[FastAPI Pod 1<br/>main.py]
+                    API2[FastAPI Pod 2<br/>main.py]
+                    API3[FastAPI Pod 3<br/>main.py]
+                end
+
+                subgraph "Worker Pods"
+                    WORKER1[Celery Worker 1<br/>Ingestion]
+                    WORKER2[Celery Worker 2<br/>Ingestion]
+                end
+
+                subgraph "Database Pods"
+                    CHROMA_POD[ChromaDB<br/>StatefulSet]
+                    REDIS_POD[Redis<br/>Cache]
+                end
+
+                subgraph "Config"
+                    CONFIGMAP[ConfigMap<br/>Environment]
+                    SECRETS[Secrets<br/>API Keys]
+                end
+            end
+        end
+
+        subgraph "AWS Services"
+            S3[S3 Buckets<br/>Document Storage]
+            ECR[ECR<br/>Container Registry]
+            CLOUDWATCH[CloudWatch<br/>Logs & Metrics]
+        end
+
+        subgraph "Monitoring"
+            PROMETHEUS[Prometheus<br/>Metrics Collection]
+            GRAFANA[Grafana<br/>Dashboards]
+            ALERTMANAGER[AlertManager<br/>Alerts]
+        end
+    end
+
+    subgraph "External APIs"
+        OPENAI_EXT[OpenAI API<br/>api.openai.com]
+    end
+
+    USERS --> LB
+    LB --> API1
+    LB --> API2
+    LB --> API3
+
+    API1 --> CHROMA_POD
+    API2 --> CHROMA_POD
+    API3 --> CHROMA_POD
+
+    API1 --> REDIS_POD
+    API2 --> REDIS_POD
+    API3 --> REDIS_POD
+
+    API1 --> WORKER1
+    API2 --> WORKER2
+
+    WORKER1 --> CHROMA_POD
+    WORKER2 --> CHROMA_POD
+
+    WORKER1 --> S3
+    WORKER2 --> S3
+
+    API1 --> OPENAI_EXT
+    API2 --> OPENAI_EXT
+    API3 --> OPENAI_EXT
+    WORKER1 --> OPENAI_EXT
+    WORKER2 --> OPENAI_EXT
+
+    CONFIGMAP --> API1
+    CONFIGMAP --> API2
+    CONFIGMAP --> API3
+    SECRETS --> API1
+    SECRETS --> API2
+    SECRETS --> API3
+
+    API1 --> CLOUDWATCH
+    API2 --> CLOUDWATCH
+    API3 --> CLOUDWATCH
+
+    PROMETHEUS --> API1
+    PROMETHEUS --> API2
+    PROMETHEUS --> API3
+    PROMETHEUS --> CHROMA_POD
+    GRAFANA --> PROMETHEUS
+    ALERTMANAGER --> PROMETHEUS
+
+    ECR --> API1
+    ECR --> API2
+    ECR --> API3
+
+    style LB fill:#667eea,color:#fff
+    style API1 fill:#28a745,color:#fff
+    style API2 fill:#28a745,color:#fff
+    style API3 fill:#28a745,color:#fff
+    style CHROMA_POD fill:#ffc107,color:#333
+    style OPENAI_EXT fill:#dc3545,color:#fff
+                    </div>
+                </div>
+            </section>
+
+            <!-- Code Relationships -->
+            <section id="relationships" class="section">
+                <h2>🔗 Code Relationships & Dependencies</h2>
+
+                <h3>Class Relationships</h3>
+                <table class="relationships-table">
+                    <thead>
+                        <tr>
+                            <th>Class/Module</th>
+                            <th>Depends On</th>
+                            <th>Used By</th>
+                            <th>Relationship Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>FastAPIApp (main.py)</strong></td>
+                            <td>Dependencies, Config, Routers</td>
+                            <td>-</td>
+                            <td>Composition</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TextChunker</strong></td>
+                            <td>-</td>
+                            <td>IngestionPipeline</td>
+                            <td>Dependency Injection</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EmbeddingService</strong></td>
+                            <td>OpenAI Client, Config</td>
+                            <td>QueryService, IngestionPipeline</td>
+                            <td>Composition</td>
+                        </tr>
+                        <tr>
+                            <td><strong>VectorStoreService</strong></td>
+                            <td>ChromaDB Client, Config</td>
+                            <td>QueryService, IngestionPipeline</td>
+                            <td>Composition</td>
+                        </tr>
+                        <tr>
+                            <td><strong>QueryService</strong></td>
+                            <td>EmbeddingService, VectorStoreService, LLMService</td>
+                            <td>API Routes</td>
+                            <td>Aggregation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LLMService</strong></td>
+                            <td>OpenAI Client, Config</td>
+                            <td>QueryService</td>
+                            <td>Composition</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IngestionPipeline</strong></td>
+                            <td>Connectors, Preprocessor, Chunker, EmbeddingService, VectorStoreService</td>
+                            <td>API Routes, Background Workers</td>
+                            <td>Orchestration</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DocumentConnector (Abstract)</strong></td>
+                            <td>-</td>
+                            <td>PDFConnector, WebConnector (inheritance)</td>
+                            <td>Inheritance (Base Class)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PDFConnector</strong></td>
+                            <td>DocumentConnector</td>
+                            <td>IngestionPipeline</td>
+                            <td>Inheritance + DI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WebConnector</strong></td>
+                            <td>DocumentConnector, requests</td>
+                            <td>IngestionPipeline</td>
+                            <td>Inheritance + DI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TextPreprocessor</strong></td>
+                            <td>-</td>
+                            <td>IngestionPipeline</td>
+                            <td>Utility/Helper</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pydantic Schemas</strong></td>
+                            <td>Pydantic BaseModel</td>
+                            <td>API Routes (validation)</td>
+                            <td>Data Transfer Objects</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dependencies Module</strong></td>
+                            <td>Config, All Services</td>
+                            <td>FastAPI (Depends())</td>
+                            <td>Factory Pattern</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Config</strong></td>
+                            <td>Pydantic Settings</td>
+                            <td>All Services</td>
+                            <td>Singleton Pattern</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Function Call Hierarchy</h3>
+                <div class="diagram-container">
+                    <div class="mermaid">
+graph TD
+    A[main.py: app startup] --> B[register_routes]
+    B --> C[ingest.py: POST /ingest]
+    B --> D[query.py: POST /query]
+
+    C --> E[Dependencies.get_pipeline]
+    E --> F[IngestionPipeline.run]
+    F --> G[DocumentConnector.fetch_documents]
+    F --> H[TextPreprocessor.clean_text]
+    F --> I[TextChunker.chunk_text]
+    F --> J[EmbeddingService.generate_embeddings_batch]
+    F --> K[VectorStoreService.add_documents]
+
+    D --> L[Dependencies.get_query_service]
+    L --> M[QueryService.process_query]
+    M --> N[EmbeddingService.generate_embedding]
+    M --> O[VectorStoreService.search]
+    M --> P[QueryService._rerank_results]
+    M --> Q[LLMService.generate_response]
+
+    J --> R[OpenAI API: POST /embeddings]
+    K --> S[ChromaDB: insert vectors]
+    N --> T[OpenAI API: POST /embeddings]
+    O --> U[ChromaDB: kNN search]
+    Q --> V[OpenAI API: POST /chat/completions]
+
+    style A fill:#667eea,color:#fff
+    style F fill:#28a745,color:#fff
+    style M fill:#28a745,color:#fff
+    style R fill:#dc3545,color:#fff
+    style S fill:#ffc107,color:#333
+    style T fill:#dc3545,color:#fff
+    style U fill:#ffc107,color:#333
+    style V fill:#dc3545,color:#fff
+                    </div>
+                </div>
+
+                <h3>Data Flow Relationships</h3>
+                <div class="diagram-container">
+                    <div class="mermaid">
+graph LR
+    A[Raw Document] -->|fetch| B[DocumentConnector]
+    B -->|raw text| C[TextPreprocessor]
+    C -->|cleaned text| D[TextChunker]
+    D -->|chunks| E[EmbeddingService]
+    E -->|embeddings| F[VectorStoreService]
+    F -->|stored| G[ChromaDB]
+
+    H[User Query] -->|query text| I[QueryService]
+    I -->|query text| J[EmbeddingService]
+    J -->|query embedding| K[VectorStoreService]
+    K -->|search| G
+    G -->|top-k chunks| K
+    K -->|results| I
+    I -->|chunks + query| L[LLMService]
+    L -->|prompt| M[OpenAI GPT]
+    M -->|completion| L
+    L -->|answer| I
+    I -->|QueryResponse| N[User]
+
+    style A fill:#e9ecef
+    style B fill:#28a745,color:#fff
+    style E fill:#28a745,color:#fff
+    style F fill:#28a745,color:#fff
+    style G fill:#ffc107,color:#333
+    style I fill:#28a745,color:#fff
+    style M fill:#dc3545,color:#fff
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>AuraRAG Project</strong> | System Architecture Documentation</p>
+            <p>Generated for technical interviews and system understanding</p>
+        </footer>
+    </div>
+
+    <a href="#" class="back-to-top" title="Back to Top">↑</a>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Back to top button
+        document.querySelector('.back-to-top').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Show/hide back to top button
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.style.display = 'flex';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
